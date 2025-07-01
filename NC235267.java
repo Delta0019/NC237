@@ -6,6 +6,7 @@ import java.io.StreamTokenizer;
 import java.util.HashMap;
 import java.util.HashSet;
 
+// Note: 注意用完即清空，同时清空X和Y，同时每个点可能不只有一个基地，因此不能直接使用 HashSet。
 public class NC235267 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StreamTokenizer st = new StreamTokenizer(br);
