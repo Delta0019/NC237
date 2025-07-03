@@ -6,7 +6,8 @@ import java.io.StreamTokenizer;
 import java.util.PriorityQueue;
 import java.util.TreeMap;
 
-public class Main {
+// 注意 HashSet 不能存储多个相同的值，如果插入重复的值，默认只保留一个
+public class NC235611 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StreamTokenizer st = new StreamTokenizer(br);
     static PrintWriter OUT = new PrintWriter(new BufferedOutputStream(System.out));
