@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.io.StreamTokenizer;
 import java.util.HashMap;
 
-public class Main {
+public class NC16884 {
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StreamTokenizer st = new StreamTokenizer(br);
