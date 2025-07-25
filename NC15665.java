@@ -99,6 +99,7 @@ public class NC15665 {
             }
             System.out.println(bfs(si, sj, n, m));
         }
+        input.close();
     }
 
     static int bfs(int si, int sj, int n, int m) {
