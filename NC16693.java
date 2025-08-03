@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class MNC16693 {
+public class NC16693 {
 
     static boolean[] dp = new boolean[20100];
 
