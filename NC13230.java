@@ -1,5 +1,7 @@
 import java.util.Scanner;
 
+// 由于区间dp需要处理 len = 0 的情况，同时 right = left + len - 1 会在 left = 0 时为 -1，因此需要让数组从 1 开始使用索引
+// 区间dp常用循环: len: 0 ~ array.length; left = 1, right = left + len - 1, left++, right++, right <= array.length
 public class NC13230 {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
