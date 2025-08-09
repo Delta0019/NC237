@@ -1,53 +1,99 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+// Note: 这题的重点是设立 dp[root][q]，即对于每个(子)树，求节点数为 0~q 时的最大苹果个数
 public class NC50505 {
-  static int N = 6005;
-  static int n;
-  static int[] happies = new int[N];
-  static int[] fathers = new int[N];
-  static ArrayList<ArrayList<Integer>> children = new ArrayList<>();
-  static int[][] dp = new int[N][2];
+  static private class Edge {
+    int child;
+    int apples;
+
+    Edge(int child, int apples) {
+      this.child = child;
+      this.apples = apples;
+    }
+  }
+
+  static private class Node {
+    int child_cnt;
+    int apple_cnt;
+    ArrayList<Edge> edges;
+
+    Node() {
+      child_cnt = 0;
+      apple_cnt = 0;
+      edges = new ArrayList<>();
+    }
+  }
+
+  static int N = 105;
+  static ArrayList<Node> nodes = new ArrayList<>();
+  static int[][] dp = new int[N][N];
+
+  static void dfs(int root, int father) {
+    Node node = nodes.get(root);
+    node.child_cnt = 1;
+    for (Edge edge : node.edges) {
+      if (edge.child == father) {
+        dp[root][1] = edge.apples;
+        break;
+      }
+    }
+    node.edges.removeIf(edge -> edge.child == father);
+
+    for (Edge edge : node.edges) {
+      dfs(edge.child, root);
+      Node child = nodes.get(edge.child);
+      node.apple_cnt += child.apple_cnt + edge.apples;
+      node.child_cnt += child.child_cnt;
+    }
+  }
+
+  static int tree_dp(int root, int q) {
+    if (q == 0 || dp[root][q] != 0) {
+      return dp[root][q];
+    }
+
+    Node root_node = nodes.get(root);
+    if (root_node.edges.isEmpty()) {
+      return dp[root][1];
+    }
+
+    int maxn = 0;
+    for (int i = 0; i < q; ++i) {
+      int left = tree_dp(root_node.edges.get(0).child, i);
+      int right = tree_dp(root_node.edges.get(1).child, q - i - 1);
+      maxn = Math.max(maxn, left + right + dp[root][1]);
+    }
+    dp[root][q] = maxn;
+    return dp[root][q];
+  }
 
   public static void main(String[] args) {
     Scanner input = new Scanner(System.in);
+    int n, q;
     n = input.nextInt();
+    q = input.nextInt();
     for (int i = 0; i <= n; ++i) {
-      children.add(new ArrayList<>());
-    }
-    for (int i = 1; i <= n; ++i) {
-      happies[i] = input.nextInt();
+      nodes.add(new Node());
     }
     for (int i = 0; i < n - 1; ++i) {
-      int l = input.nextInt(), k = input.nextInt();
-      fathers[l] = k;
-      children.get(k).add(l);
+      int node1 = input.nextInt(), node2 = input.nextInt(), apples = input.nextInt();
+      nodes.get(node1).edges.add(new Edge(node2, apples));
+      nodes.get(node2).edges.add(new Edge(node1, apples));
     }
-    input.nextInt();
-    input.nextInt();
     input.close();
 
-    int ans = 0;
+    int root = 0;
     for (int i = 1; i <= n; ++i) {
-      if (fathers[i] == 0) {
-        dfs(i);
-        ans += Math.max(dp[i][1], dp[i][0]);
+      Node node = nodes.get(i);
+      if (node.edges.size() == 2) {
+        root = i;
+        break;
       }
     }
-    System.out.println(ans);
-  }
 
-  static void dfs(int father) {
-    dp[father][1] = happies[father];
-    if (children.get(father).size() == 0) {
-      dp[father][0] = 0;
-      return;
-    }
-
-    for (int child : children.get(father)) {
-      dfs(child);
-      dp[father][0] += Math.max(dp[child][0], dp[child][1]);
-      dp[father][1] += dp[child][0];
-    }
+    dfs(root, root);
+    tree_dp(root, q + 1);
+    System.out.println(dp[root][q + 1]);
   }
 }
