@@ -3,6 +3,34 @@
   "configurations": [
     {
       "type": "java",
+      "name": "JVMClassCacheDemo",
+      "request": "launch",
+      "mainClass": "JVMClassCacheDemo",
+      "projectName": "coding_2bd181fd"
+    },
+    {
+      "type": "java",
+      "name": "StackDepthExceptionTest",
+      "request": "launch",
+      "mainClass": "StackDepthExceptionTest",
+      "projectName": "coding_2bd181fd"
+    },
+    {
+      "type": "java",
+      "name": "TryCatchPerformanceTest",
+      "request": "launch",
+      "mainClass": "TryCatchPerformanceTest",
+      "projectName": "coding_2bd181fd"
+    },
+    {
+      "type": "java",
+      "name": "NormalVsExceptionExecution",
+      "request": "launch",
+      "mainClass": "NormalVsExceptionExecution",
+      "projectName": "coding_2bd181fd"
+    },
+    {
+      "type": "java",
       "name": "Main",
       "request": "launch",
       "mainClass": "Main",
