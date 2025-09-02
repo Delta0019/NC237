@@ -37,6 +37,13 @@
       binary_search(vec.begin(), vec.end(), target, cmp);   // 基于降序查找
       ```
 
+5. 常见Map
+   1. unordered_map: 哈希表
+   2. map: 红黑树
+   3. set: 基于红黑树的有序集合
+   4. multiSet: 基于红黑树的有序可重复集合
+      1. **Note**: erase(val) 会删除所有元素, 如果需要删除某元素且只删除一次, 需要使用 find 获取 it 然后 erase(it).
+
 ## 算法
 
 1. 第九章
