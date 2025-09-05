@@ -1,5 +1,9 @@
 # bug 记录
 
+## 测试
+
+1. 尽量使用大一些的数字进行测试，因为小数字会和其index重合，导致无法分辨输出的是index还是input。
+
 ## Java
 
 1. 由于java的快读快写代码量较长，因此在编写代码前先查看其输入数量级是否大于 1e5，如果是，考虑用 C++ 编写
@@ -13,6 +17,9 @@
 3. lambda
    1. auto cmp = [](Node a, Node b) { return a.distance > b.distance; };
    2. 注意这里只能使用 > , 因为 cpp 会把所有非 0 的值默认转为 true
+   3. Note:
+      1. cmp 前最好使用 auto, 不能使用 bool
+      2. 不能使用默认构造函数: set<Node, decltype(cmp)> s(cmp); 使用这里时，不仅要在 decltype 中传入 lambda 表达式，还需要 s(cmp) 的构造函数中传入 cmp
 4. 优先级问题
    1. true -> 优先级低: 包括 priority_queue 在内的所有堆
       1. 推荐使用重载 operator<(const Node& other) { return a > other.a;}
