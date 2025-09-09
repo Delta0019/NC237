@@ -155,3 +155,37 @@
         }
       } 
       ```
+
+   3. 数论
+      1. 质数
+         1. 筛选一定范围内的质数
+            1. 算法:
+
+            ```cpp
+            function sieveOfEratosthenes(n) {
+               if (n < 2) return [];
+               
+               const isPrime = new Array(n + 1).fill(true);
+               isPrime[0] = isPrime[1] = false;
+               
+               for (let i = 2; i * i <= n; i++) {
+                  if (isPrime[i]) {
+                        // 从 i² 开始标记，因为更小的倍数已经被标记过了
+                        for (let j = i * i; j <= n; j += i) {
+                           isPrime[j] = false;
+                        }
+                  }
+               }
+               
+               const primes = [];
+               for (let i = 2; i <= n; i++) {
+                  if (isPrime[i]) {
+                        primes.push(i);
+                  }
+               }
+               
+               return primes;
+            }
+            ```
+
+         2.
