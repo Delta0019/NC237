@@ -156,36 +156,67 @@
       } 
       ```
 
-   3. 数论
-      1. 质数
-         1. 筛选一定范围内的质数
-            1. 算法:
+   3. SPFA 算法
+      1. 场景:
+         1. 和 dijkstra 一样用于解决**单源最短路问题**，但能处理负权边
+         2. 同时适用于处理对于某点对应的**dis[i]不能在访问即确定**，可能反复更新的题目。
+      2. 核心思路:
+         1. 和dijkstra一样，初始将所有点 dis = infinit，令 dis[0] = 0，将点0加入队列
+         2. 之后不断取出队头，访问其边，如果边的值比原本小，**且不在队列中**，则加入队列。
+         3. 直到队列为空。
+      3. 判断负权环的存在:
+         1. 思路: 统计访问次数链，如果 >= n+1 则存在负权环，此时直接返回即可
+         2. 公式: cnt[edge.to] = cnt[node] + 1;
+   4. 最短路图
+      1. 基本思想: 通过 dijkstra 遍历图，此时图就是从该节点出发的最短路图
+      2. 时间复杂度: O(V*(V + E)logV)
+      3. 步骤
+         1. 使用dijkstra遍历图
+            1. 每通过一个 edge 访问到节点，则判断该dis[to]，是否比原本更小
+               1. 如果是，则清空最短路图中该节点的边，并将当前边加入
+               2. 如果不是，则直接将当前边加入最短路图中该节点的边
+         2. 将所有节点的最短路图叠加，就是该图的最短路图
+      4. 变种:
+         1. 如果需要，也可以建反向图
+            1. 应用场景: 对于每条边，计算有多少条不同的最短路经过该道路
+            2. 思路: 对于每个节点的最短路图，[边的经过数量] = 正向图中以 [边起点] 为终点的路径数 * 反向图中以 [边终点] 为起点的路径数。对于每个节点分别进行 dijkstra + 反向图拓扑排序，累加即可。
+            3. 注意, 对于 A -> B, B的"正向图中以 [边起点] 为终点的路径数" 直接继承自A(反之亦然)
+   5. 最小生成树
+      1. 场景: 通过尽可能少的边(即 n-1)， 将整个树连接，使得整个树最短
+      2. Prim 算法
+         1. **贪心**地加入最短的**边**(而不是dis[node])即可。
+         2. 即维护一个最小堆，每次push({edge.to, edge.w}); 注意这里的 edge.to 必须是未访问过的.
 
-            ```cpp
-            function sieveOfEratosthenes(n) {
-               if (n < 2) return [];
-               
-               const isPrime = new Array(n + 1).fill(true);
-               isPrime[0] = isPrime[1] = false;
-               
-               for (let i = 2; i * i <= n; i++) {
-                  if (isPrime[i]) {
-                        // 从 i² 开始标记，因为更小的倍数已经被标记过了
-                        for (let j = i * i; j <= n; j += i) {
-                           isPrime[j] = false;
-                        }
-                  }
+3. 数论
+   1. 质数
+      1. 筛选一定范围内的质数
+         1. 算法:
+
+         ```cpp
+         function sieveOfEratosthenes(n) {
+            if (n < 2) return [];
+            
+            const isPrime = new Array(n + 1).fill(true);
+            isPrime[0] = isPrime[1] = false;
+            
+            for (let i = 2; i * i <= n; i++) {
+               if (isPrime[i]) {
+                     // 从 i² 开始标记，因为更小的倍数已经被标记过了
+                     for (let j = i * i; j <= n; j += i) {
+                        isPrime[j] = false;
+                     }
                }
-               
-               const primes = [];
-               for (let i = 2; i <= n; i++) {
-                  if (isPrime[i]) {
-                        primes.push(i);
-                  }
-               }
-               
-               return primes;
             }
-            ```
+            
+            const primes = [];
+            for (let i = 2; i <= n; i++) {
+               if (isPrime[i]) {
+                     primes.push(i);
+               }
+            }
+            
+            return primes;
+         }
+         ```
 
-         2.
+      2.
