@@ -7,8 +7,7 @@ vector<int> a(N);
 vector<vector<int>> graph(N, vector<int>());
 vector<bitset<N>> lights(N);
 
-int min_cnt = INT_MAX;
-set<int> ans;
+vector<int> ans;
 
 void transfer()
 {
@@ -25,6 +24,8 @@ void transfer()
 
 void solve()
 {
+  bool found = false;
+
   for (int mask = 0; mask < (1 << n); ++mask)
   {
     bitset<N> cur;
@@ -33,26 +34,29 @@ void solve()
 
     for (int i = 1; i <= n; ++i)
     {
-      if ((mask >> (i - 1) & 1) == 0)
+      if (((mask >> (i - 1)) & 1) == 0)
         continue;
-
       cur ^= lights[i];
     }
 
     if (cur.count() == 0)
     {
-      bitset<N> res(mask);
-      if (res.count() > min_cnt)
-        continue;
+      vector<int> cand;
+      for (int i = 0; i < n; ++i)
+        if ((mask >> i) & 1)
+          cand.push_back(i + 1);
 
-      if (res.count() == min_cnt)
-        ans.insert(mask);
-
-      if (res.count() < min_cnt)
+      if (!found)
       {
-        min_cnt = res.count();
-        ans = set<int>();
-        ans.insert(mask);
+        ans = cand;
+        found = true;
+      }
+      else
+      {
+        if (cand.size() < ans.size())
+          ans = cand;
+        else if (cand.size() == ans.size() && cand < ans)
+          ans = cand;
       }
     }
   }
@@ -86,23 +90,8 @@ signed main()
   }
   else
   {
-    set<string> res;
-    for (bitset<N> bit : ans)
-    {
-      string str = "";
-      for (int i = 0; i < n; ++i)
-      {
-        if (bit[i])
-          str += (char)('0' + i + 1);
-      }
-      res.insert(str);
-    }
-
-    auto it = res.begin();
-    for (char ch : *it)
-    {
-      cout << ch << ' ';
-    }
+    for (int num : ans)
+      cout << num << ' ';
     cout << endl;
   }
 

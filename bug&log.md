@@ -138,6 +138,8 @@
       1. 对于基本类型，有默认比较器: **先比较first, 再比较second**
    2. string
       1. 等效于Java的 **StringBuilder**
+   3. vector
+      1. vector<int> 可以通过 < 进行字典序比较
 3. IO
    1. 整行输入
       1. getline(cin, str); // 需要先声明 string str;
