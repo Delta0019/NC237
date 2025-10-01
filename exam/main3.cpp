@@ -1,71 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
-#define int long long
-const int N = 0x3f3f3f3e;
+const int N = 105;
+const int M = 10;
+const int inf = 0x3f3f3f3f;
 
-// [1,2,3,null,null,7,8]
-// [1,2,3,null,4,null,4,null,4,null,4]
+int n, m, init, ans = 0;
+int power[N], mana[N], bonus[M];
 
-struct Node
+void dfs(int idx, int level, int gift, int cost)
 {
-  int index, val;
+  gift += power[idx] * bonus[level];
+  cost += mana[idx] * bonus[level];
 
-  bool operator<(const Node &other) const
-  {
-    return index < other.index;
-  }
-
-  Node() : index(-1), val(N) {};
-  Node(int index, int val) : index(index), val(val) {};
-};
-
-Node root;
-int ans = 0;
-map<Node, pair<Node, Node>> tree;
-
-int strtoi(string str)
-{
-  if (str == "null")
-    return N;
-  return stoi(str);
-}
-
-void dfs(Node root, int mul)
-{
-  if (root.val == N)
+  if (cost > init)
     return;
 
-  // left node
-  if (tree.find(root) == tree.end())
-  {
-    if (mul < 0)
-      return;
+  ans = max(ans, gift);
 
-    if (mul == 0)
-    {
-      ans++;
-      return;
-    }
-
-    int base = sqrt(root.val);
-    if ((base * base) == root.val)
-      ans++;
+  if (idx == n)
     return;
+
+  for (int l = 1; l <= m; ++l)
+  {
+    int waste = l > level ? (l - level) : 0;
+    dfs(idx + 1, l, gift, cost + waste);
   }
-
-  Node left = tree[root].first;
-  Node right = tree[root].second;
-
-  if (left.val != N)
-    dfs(left, mul * left.val);
-
-  if (right.val != N)
-    dfs(right, mul * right.val);
 }
 
 void solve()
 {
-  dfs(root, root.val);
+  for (int l = 1; l <= m; ++l)
+  {
+    dfs(1, l, 0, 0);
+  }
+  cout << ans << endl;
 }
 
 signed main()
@@ -73,44 +41,23 @@ signed main()
   ios::sync_with_stdio(false);
   cin.tie(0), cout.tie(0);
 
-  string str;
-  cin >> str;
-  str = str.substr(1, str.length() - 2);
-
-  int index = 0;
-  stringstream ss(str);
-  string numStr;
-  queue<Node> nodes;
-
-  while (getline(ss, numStr, ','))
+  cin >> n >> m >> init;
+  for (int i = 1; i <= n; ++i)
   {
-    if (nodes.empty())
-    {
-      root = {index++, strtoi(numStr)};
-      if (root.val == N)
-        break;
-      nodes.push(root);
-      continue;
-    }
+    cin >> power[i];
+  }
 
-    Node num1, num2;
-    num1 = {index++, strtoi(numStr)};
-    getline(ss, numStr, ',');
-    num2 = {index++, strtoi(numStr)};
+  for (int i = 1; i <= n; ++i)
+  {
+    cin >> mana[i];
+  }
 
-    Node parent = nodes.front();
-    nodes.pop();
-    tree[parent].first = num1;
-    tree[parent].second = num2;
-
-    if (num1.val != N)
-      nodes.push(num1);
-    if (num2.val != N)
-      nodes.push(num2);
+  for (int i = 1; i <= m; ++i)
+  {
+    cin >> bonus[i];
   }
 
   solve();
-  cout << ans << endl;
 
   return 0;
 }
